@@ -21,6 +21,8 @@ import AccountListScreen from '../screens/AccountListScreen';
 import CreateAccountScreen from '../screens/CreateAccountScreen';
 import EditAccountScreen from '../screens/EditAccountScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import ShopScreen from '../screens/ShopScreen';
+import CreateShopScreen from '../screens/CreateShopScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,6 +42,7 @@ const ExternalAdminTabs = () => (
     <Tab.Screen name="Dashboard" component={ExternalAdminDashboard} />
     <Tab.Screen name="Shops" component={ExternalShopManagement} />
     <Tab.Screen name="Users" component={ExternalUserManagement} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
 
@@ -94,6 +97,9 @@ const MainNavigator = ({user}) => {
       <Stack.Screen name="Accounts" component={AccountListScreen} />
       <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
       <Stack.Screen name="EditAccount" component={EditAccountScreen} />
+      <Stack.Screen name="Shops" component={ShopScreen} />
+      <Stack.Screen name="CreateShop" component={CreateShopScreen} />
+      <Stack.Screen name="ShopDetails" component={ShopDetails} />
     </Stack.Navigator>
   );
 };

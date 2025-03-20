@@ -1,12 +1,15 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Header from '../../components/Header';
+import ShopScreen from '../ShopScreen';
+import {useNavigation} from '@react-navigation/native';
 
 const ShopManagement = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Header title="Shop Management" />
-      <Text style={styles.text}>View and assign shops to accounts.</Text>
+      <ShopScreen navigation={navigation}></ShopScreen>
     </View>
   );
 };

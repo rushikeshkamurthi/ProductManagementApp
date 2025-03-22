@@ -23,6 +23,11 @@ import ProfileScreen from '../screens/ProfileScreen';
 import ShopScreen from '../screens/ShopScreen';
 import CreateShopScreen from '../screens/CreateShopScreen';
 import AdminUserManagement from '../screens/admin/AdminUserManagement';
+import ProductList from '../components/ProductList';
+import ProductScreen from '../screens/ProductScreen';
+import Invetory from '../screens/subAdmin/Invetory';
+import CreateProductScreen from '../screens/CreateProductScreen';
+import UpdateProductScreen from '../screens/UpdateProductScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -49,8 +54,9 @@ const ExternalAdminTabs = () => (
 const SubAdminTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Dashboard" component={SubAdminDashboard} />
-    <Tab.Screen name="Shops" component={SubAdminShopManagement} />
+    <Tab.Screen name="Invetory" component={Invetory} />
     <Tab.Screen name="Users" component={SubAdminUserManagement} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
 
@@ -100,6 +106,18 @@ const MainNavigator = ({user}) => {
       <Stack.Screen name="Shops" component={ShopScreen} />
       <Stack.Screen name="CreateShop" component={CreateShopScreen} />
       <Stack.Screen name="ShopDetails" component={ShopDetails} />
+      <Stack.Screen name="ProductList" component={ProductList} />
+      <Stack.Screen name="ProductScreen" component={ProductScreen} />
+      <Stack.Screen
+        name="CreateProduct"
+        component={CreateProductScreen}
+        options={{title: 'Create Product'}}
+      />
+      <Stack.Screen
+        name="UpdateProduct"
+        component={UpdateProductScreen}
+        options={{title: 'Update Product'}}
+      />
     </Stack.Navigator>
   );
 };

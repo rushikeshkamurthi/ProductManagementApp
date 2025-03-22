@@ -10,8 +10,6 @@ import {useShopStore} from '../store/shopStore';
 
 const ShopList = ({navigation}) => {
   const {shops, loading, error} = useShopStore();
-  console.log('shops', shops);
-
   if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
   if (error) return <Text>Error: {error}</Text>;
 

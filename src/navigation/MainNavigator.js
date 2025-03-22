@@ -12,7 +12,6 @@ import ShopDetails from '../screens/user/ShopDetails';
 import ProductListings from '../screens/user/ProductListings';
 import LoginScreen from '../screens/LoginScreen';
 import DashboardScreen from '../screens/DashboardScreen';
-import UserManagement from '../screens/admin/UserManagement';
 import AccountManagement from '../screens/admin/AccountManagement';
 import ShopManagement from '../screens/admin/ShopManagement';
 import ProductManagement from '../screens/admin/ProductManagement';
@@ -23,6 +22,7 @@ import EditAccountScreen from '../screens/EditAccountScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ShopScreen from '../screens/ShopScreen';
 import CreateShopScreen from '../screens/CreateShopScreen';
+import AdminUserManagement from '../screens/admin/AdminUserManagement';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,7 +30,7 @@ const Tab = createBottomTabNavigator();
 const AdminTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Dashboard" component={DashboardScreen} />
-    <Tab.Screen name="Users" component={UserManagement} />
+    <Tab.Screen name="Users" component={AdminUserManagement} />
     <Tab.Screen name="Accounts" component={AccountManagement} />
     <Tab.Screen name="Shops" component={ShopManagement} />
     <Tab.Screen name="Profile" component={ProfileScreen} />

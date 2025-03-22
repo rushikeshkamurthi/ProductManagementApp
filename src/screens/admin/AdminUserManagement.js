@@ -2,15 +2,13 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Header from '../../components/Header';
 import UserManagement from '../UserManagement';
-import {useNavigation} from '@react-navigation/native';
 
-const ExternalUserManagement = () => {
-  const navigation = useNavigation();
+const AdminUserManagement = () => {
   return (
     <View style={styles.container}>
       <Header title="User Dashboard" />
       <Text style={styles.text}></Text>
-      <UserManagement navigation={navigation}></UserManagement>
+      <UserManagement></UserManagement>
     </View>
   );
 };
@@ -20,4 +18,4 @@ const styles = StyleSheet.create({
   text: {fontSize: 18},
 });
 
-export default ExternalUserManagement;
+export default AdminUserManagement;

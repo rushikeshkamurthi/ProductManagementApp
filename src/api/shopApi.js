@@ -18,7 +18,7 @@ const ShopApi = {
   },
 
   deleteShop: async id => {
-    return apiClient.delete(`/shops/${id}`);
+    return apiClient.patch(`/shops/${id}/soft-delete`);
   },
 };
 

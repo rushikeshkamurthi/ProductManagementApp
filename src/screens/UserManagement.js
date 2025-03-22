@@ -8,8 +8,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {observer} from 'mobx-react';
-import userStore from '../../store/userStore';
-import {AuthContext} from '../../context/AuthContext';
+import userStore from '../store/userStore';
+import {AuthContext} from '../context/AuthContext';
 
 const UserManagement = observer(({navigation}) => {
   const {user, logout} = useContext(AuthContext);

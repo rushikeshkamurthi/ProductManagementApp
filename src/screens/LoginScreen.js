@@ -1,15 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Alert,
   Image,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { Checkbox } from 'react-native-paper';
+import {Checkbox} from 'react-native-paper';
 import CustomButton from '../common/CustomButton';
-import { AuthContext } from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import styles from '../ScreenStyleSheet/LoginScreenStyle';
 
 const LoginScreen = ({navigation}) => {
@@ -21,20 +21,25 @@ const LoginScreen = ({navigation}) => {
   const isFormValid = username.length > 0 && password.length >= 6 && agree;
 
   const handleLogin = async () => {
-    console.log("Login button clicked!");
+    console.log('Login button clicked!');
     if (!agree) {
-      Alert.alert('Error', 'You must accept the Terms & Conditions to continue.');
+      Alert.alert(
+        'Error',
+        'You must accept the Terms & Conditions to continue.',
+      );
       return;
     }
 
     if (!isFormValid) {
-      Alert.alert('Error', 'Please fill all fields and ensure your password is at least 6 characters.');
+      Alert.alert(
+        'Error',
+        'Please fill all fields and ensure your password is at least 6 characters.',
+      );
       return;
     }
 
     try {
       await login(username, password);
-      navigation.replace('DashboardScreen');
     } catch (error) {
       Alert.alert('Login Failed', error.message);
     }
@@ -76,7 +81,8 @@ const LoginScreen = ({navigation}) => {
             onPress={() => setAgree(!agree)}
             color="#007bff"
           />
-          <TouchableOpacity onPress={() => navigation.navigate('TermsAndConditions')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('TermsAndConditions')}>
             <Text style={styles.checkboxText}>
               I agree to <Text style={styles.terms}>Terms and Conditions</Text>
             </Text>
@@ -85,7 +91,7 @@ const LoginScreen = ({navigation}) => {
 
         {/* Login Button */}
         <CustomButton
-        mode="contained" 
+          mode="contained"
           title="Login"
           onPress={handleLogin}
           disabled={!isFormValid}

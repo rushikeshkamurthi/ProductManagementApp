@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
-import {View, Text} from 'react-native';
-import {AuthContext} from '../context/AuthContext';
+import React, { useContext } from 'react';
+import { Text, View } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 const DashboardScreen = () => {
   const {user} = useContext(AuthContext);

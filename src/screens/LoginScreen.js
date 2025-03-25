@@ -1,6 +1,6 @@
-import React, {useState, useContext} from 'react';
-import {View, Text, TextInput, Button, Alert, StyleSheet} from 'react-native';
-import {AuthContext} from '../context/AuthContext';
+import React, { useContext, useState } from 'react';
+import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('test3');
@@ -17,7 +17,8 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Login Page</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Username"

@@ -6,13 +6,15 @@ const ShopScreen = ({navigation}) => {
   return (
     <View style={{flex: 1}}>
       <Text style={{fontSize: 24, textAlign: 'center', marginVertical: 10}}>
-        Shops
+        Your Shops
       </Text>
-      <ShopList navigation={navigation} />
       <Button
-        title="Add New Shop"
-        onPress={() => navigation.navigate('CreateShop')}
+        title="Create New order"
+        onPress={() => navigation.navigate('Shop')}
       />
+      <Text style={{fontSize: 24, textAlign: 'center', marginVertical: 10}}>
+        All past orders
+      </Text>
     </View>
   );
 };

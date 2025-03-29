@@ -14,7 +14,7 @@ import styles from '../ScreenStyleSheet/LoginScreenStyle';
 
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('password123');
   const [agree, setAgree] = useState(false);
   const {login} = useContext(AuthContext);
 

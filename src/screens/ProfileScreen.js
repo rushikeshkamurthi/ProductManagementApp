@@ -1,46 +1,86 @@
 import React, {useContext} from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
+import {useNavigation} from '@react-navigation/native';
 
 const ProfileScreen = () => {
   const {user, logout} = useContext(AuthContext);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+      {/* Profile Section */}
+      <View style={styles.profileHeader}>
+        <Image
+          source={{uri: user?.avatar || 'https://via.placeholder.com/150'}}
+          style={styles.avatar}
+        />
+        <View>
+          <Text style={styles.name}>{user?.username || 'N/A'}</Text>
+          <Text style={styles.email}>{user?.email || 'N/A'}</Text>
+        </View>
+      </View>
 
-      {user ? (
-        <>
-          <Text style={styles.detail}>Name: {user.username || 'N/A'}</Text>
-          <Text style={styles.detail}>Email: {user.email || 'N/A'}</Text>
-          <Text style={styles.detail}>Role: {user.roles[0] || 'N/A'}</Text>
-        </>
-      ) : (
-        <Text style={styles.detail}>No user data available</Text>
-      )}
+      {/* Profile Options */}
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => navigation.navigate('EditProfile')}>
+        <Text style={styles.optionText}>Edit Profile</Text>
+      </TouchableOpacity>
 
-      <Button title="Logout" onPress={logout} color="red" />
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => navigation.navigate('SavedAddresses')}>
+        <Text style={styles.optionText}>Saved Addresses</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => navigation.navigate('PaymentMethods')}>
+        <Text style={styles.optionText}>Payment Methods</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => navigation.navigate('HelpSupport')}>
+        <Text style={styles.optionText}>Help & Support</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.option, {backgroundColor: '#ff4d4d'}]}
+        onPress={logout}>
+        <Text style={styles.optionText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
+  container: {flex: 1, backgroundColor: '#fff', padding: 20},
+  profileHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
     marginBottom: 20,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 10,
+    borderColor: '#ccc',
   },
-  detail: {
-    fontSize: 18,
-    marginBottom: 10,
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginRight: 15,
+    borderWidth: 1,
   },
+  name: {fontSize: 20, fontWeight: 'bold'},
+  email: {fontSize: 16, color: 'gray'},
+  option: {
+    padding: 15,
+    backgroundColor: '#F8F8F8',
+    marginVertical: 5,
+    borderRadius: 8,
+  },
+  optionText: {fontSize: 18, fontWeight: '500'},
 });
 
 export default ProfileScreen;

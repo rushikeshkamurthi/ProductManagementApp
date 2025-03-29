@@ -28,6 +28,17 @@ import ProductScreen from '../screens/ProductScreen';
 import Invetory from '../screens/subAdmin/Invetory';
 import CreateProductScreen from '../screens/CreateProductScreen';
 import UpdateProductScreen from '../screens/UpdateProductScreen';
+import OrderSummary from '../screens/user/OrderSummary';
+import PaymentScreen from '../screens/user/PaymentScreen';
+import Shop from '../screens/user/Shop';
+import ProductDetails from '../components/ProductDetails';
+import MyShops from '../screens/user/MyShops';
+import OrderDetailsScreen from '../screens/user/OrderDetailsScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
+import SavedAddressesScreen from '../screens/SavedAddressesScreen';
+import MyPaymentMethodsScreen from '../screens/MyPaymentMethodsScreen';
+import HelpSupportScreen from '../screens/HelpSupportScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,7 +66,6 @@ const SubAdminTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Dashboard" component={SubAdminDashboard} />
     <Tab.Screen name="Invetory" component={Invetory} />
-    <Tab.Screen name="Users" component={SubAdminUserManagement} />
     <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
@@ -63,8 +73,9 @@ const SubAdminTabs = () => (
 const UserTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Dashboard" component={UserDashboard} />
-    <Tab.Screen name="Shop Details" component={ShopDetails} />
-    <Tab.Screen name="Products" component={ProductListings} />
+    <Tab.Screen name="My Shop" component={MyShops} />
+    <Tab.Screen name="Inventory" component={ProductList} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
 
@@ -74,7 +85,7 @@ const roleMappings = {
   ROLE_EXTERNAL_ADMIN: 'external_admin',
   ROLE_EXTERNAL_SUB_ADMIN: 'external_sub_admin',
   ROLE_INTERNAL_SUB_ADMIN: 'internal_sub_admin',
-  ROLE_USER: 'user',
+  ROLE_EXTERNAL_USER: 'external_user',
 };
 
 const MainNavigator = ({user}) => {
@@ -118,6 +129,16 @@ const MainNavigator = ({user}) => {
         component={UpdateProductScreen}
         options={{title: 'Update Product'}}
       />
+      <Stack.Screen name="OrderSummary" component={OrderSummary} />
+      <Stack.Screen name="Payment" component={PaymentScreen} />
+      <Stack.Screen name="Shop" component={Shop} />
+      <Stack.Screen name="ProductDetails" component={ProductDetails} />
+      <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen name="SavedAddresses" component={SavedAddressesScreen} />
+      <Stack.Screen name="PaymentMethods" component={MyPaymentMethodsScreen} />
+      <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
   );
 };

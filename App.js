@@ -7,9 +7,9 @@ import lightTheme from './src/theme/lightTheme';
 import darkTheme from './src/theme/darkTheme';
 
 const MainApp = () => {
-  const {isDarkTheme} = useContext(ThemeContext);
+  const theme = useContext(ThemeContext); // `theme` might be undefined
   return (
-    <PaperProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+    <PaperProvider theme={theme?.isDarkTheme ? darkTheme : lightTheme}>
       <AppNavigator />
     </PaperProvider>
   );

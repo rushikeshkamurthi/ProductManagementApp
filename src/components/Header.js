@@ -1,13 +1,25 @@
 import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 
-export default function Header({user, onLogout}) {
+const Header = ({title}) => {
   return (
-    <header className="header">
-      <h1>Dashboard</h1>
-      <div className="user-info">
-        <span>{user?.email}</span>
-        <button onClick={onLogout}>Logout</button>
-      </div>
-    </header>
+    <View style={styles.header}>
+      <Text style={styles.headerText}>{title}</Text>
+    </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#007bff',
+    padding: 15,
+    alignItems: 'center',
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+});
+
+export default Header;

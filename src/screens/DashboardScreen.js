@@ -1,10 +1,10 @@
 import React from 'react';
-<<<<<<< Updated upstream
-import {View, Text} from 'react-native';
-=======
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
+
+import { ScrollView, TouchableOpacity } from 'react-native';
 import styles from '../ScreenStyleSheet/DashboardStyle';
->>>>>>> Stashed changes
+
+import React from 'react';
 
 const DashboardScreen = () => {
   return (

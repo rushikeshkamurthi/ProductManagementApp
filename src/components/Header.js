@@ -1,5 +1,4 @@
 import React from 'react';
-
 export default function Header({user, onLogout}) {
   return (
     <header className="header">

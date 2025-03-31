@@ -1,8 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import Header from '../../components/Header';
+import { StyleSheet, View } from 'react-native';
 import ShopScreen from '../ShopScreen';
-import {useNavigation} from '@react-navigation/native';
 
 const ShopManagement = () => {
   const navigation = useNavigation();

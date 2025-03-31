@@ -1,22 +1,55 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
-import ShopList from '../components/ShopList';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const ShopScreen = ({navigation}) => {
+const ShopScreen = ({ navigation }) => {
   return (
-    <View style={{flex: 1}}>
-      <Text style={{fontSize: 24, textAlign: 'center', marginVertical: 10}}>
-        Your Shops
-      </Text>
-      <Button
-        title="Create New order"
+    <View style={styles.container}>
+      <Text style={styles.headerText}>Your Shops</Text>
+
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => navigation.navigate('Shop')}
-      />
-      <Text style={{fontSize: 24, textAlign: 'center', marginVertical: 10}}>
-        All past orders
-      </Text>
+      >
+        <Text style={styles.buttonText}>Create New Order</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.headerText}>All Past Orders</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f9fa',
+    padding: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+    marginVertical: 15,
+  },
+  button: {
+    backgroundColor: '#007bff', // Consistent blue color
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+  },
+});
 
 export default ShopScreen;

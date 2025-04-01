@@ -1,13 +1,13 @@
-import React, {useEffect} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
 import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
   ActivityIndicator,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {observer} from 'mobx-react-lite';
 import accountStore from '../store/accountStore';
 
 const AccountListScreen = observer(() => {

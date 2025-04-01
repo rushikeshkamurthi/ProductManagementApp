@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  TextInput,
-  ScrollView,
-  Modal,
   Dimensions,
+  FlatList,
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const {width} = Dimensions.get('window');
@@ -116,6 +116,7 @@ const ShopScreen = ({navigation}) => {
       {/* Search Bar */}
       <TextInput
         style={styles.searchBar}
+          placeholderTextColor="#000"
         placeholder="Search for products..."
         value={search}
         onChangeText={handleSearch}
@@ -224,11 +225,13 @@ const styles = StyleSheet.create({
   container: {flex: 1, padding: 20, backgroundColor: '#fff'},
   searchBar: {
     height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    paddingLeft: 15,
-    marginBottom: 10,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  borderRadius: 10,
+  paddingLeft: 15,
+  
+  marginBottom: 10,
+  color: '#000', 
   },
   filterContainer: {flexDirection: 'row', marginBottom: 10, maxHeight: 32},
   chip: {
@@ -253,7 +256,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 1,
-    borderColor: '#ccc',
   },
   categoryImage: {width: 80, height: 80, borderRadius: 40},
   categoryText: {marginTop: 0, fontSize: 12, fontWeight: 'bold'},
@@ -269,7 +271,7 @@ const styles = StyleSheet.create({
   productName: {fontSize: 18, fontWeight: 'bold'},
   price: {fontSize: 16, color: '#EC5228', marginVertical: 5},
   addButton: {
-    backgroundColor: '#3F7D58',
+    backgroundColor: '#007BFF',
     padding: 8,
     borderRadius: 5,
     alignItems: 'center',
@@ -280,7 +282,7 @@ const styles = StyleSheet.create({
   quantityText: {fontSize: 16, fontWeight: 'bold'},
   quantity: {fontSize: 18, marginHorizontal: 10},
   cartButton: {
-    backgroundColor: '#3F7D58',
+    backgroundColor: '#007BFF',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',

@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ExternalAdminDashboard from '../screens/externaladmin/ExternalAdminDashboard';
 import ExternalShopManagement from '../screens/externaladmin/ExternalShopManagement';
 import ExternalUserManagement from '../screens/externaladmin/ExternalUserManagement';
@@ -44,7 +45,28 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const AdminTabs = () => (
-  <Tab.Navigator>
+  <Tab.Navigator
+    screenOptions={({route}) => ({
+      tabBarIcon: ({color, size}) => {
+        let iconName;
+
+        if (route.name === 'Dashboard') {
+          iconName = 'dashboard';
+        } else if (route.name === 'Users') {
+          iconName = 'users';
+        } else if (route.name === 'Accounts') {
+          iconName = 'briefcase';
+        } else if (route.name === 'Shops') {
+          iconName = 'shopping-bag';
+        } else if (route.name === 'Profile') {
+          iconName = 'user';
+        }
+
+        return <FontAwesome name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: 'blue',
+      tabBarInactiveTintColor: 'gray',
+    })}>
     <Tab.Screen name="Dashboard" component={DashboardScreen} />
     <Tab.Screen name="Users" component={AdminUserManagement} />
     <Tab.Screen name="Accounts" component={AccountManagement} />

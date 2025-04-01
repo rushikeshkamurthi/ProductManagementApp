@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 const ProductDetails = ({route}) => {
   const {product} = route.params;

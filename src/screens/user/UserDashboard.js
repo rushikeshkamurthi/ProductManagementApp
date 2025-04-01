@@ -1,16 +1,23 @@
-import { FontAwesome } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../components/Header';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const UserDashboard = () => {
   return (
     <View style={styles.container}>
       <Header title="Shop Details" />
       <View style={styles.card}>
-        <FontAwesome name="shopping-bag" size={50} color="#ff6f00" style={styles.icon} />
+        <FontAwesome
+          name="shopping-bag"
+          size={50}
+          color="#ff6f00"
+          style={styles.icon}
+        />
         <Text style={styles.title}>Welcome to Your Dashboard</Text>
-        <Text style={styles.description}>Here you can view and manage your shop details with ease.</Text>
+        <Text style={styles.description}>
+          Here you can view and manage your shop details with ease.
+        </Text>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>View Details</Text>
         </TouchableOpacity>
@@ -33,7 +40,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowRadius: 5,
     elevation: 3,
     alignItems: 'center',

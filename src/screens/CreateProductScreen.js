@@ -1,16 +1,18 @@
-import React, {useState} from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  ActivityIndicator,
-  Alert,
+  View,
 } from 'react-native';
-import {observer} from 'mobx-react-lite';
 import productStore from '../store/productStore';
 
-const CreateProductScreen = observer(({navigation}) => {
+const CreateProductScreen = observer(({ navigation }) => {
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [subcategory, setSubcategory] = useState('');
@@ -37,86 +39,114 @@ const CreateProductScreen = observer(({navigation}) => {
       Alert.alert('Error', productStore.error);
     } else {
       Alert.alert('Success', 'Product created successfully!', [
-        {text: 'OK', onPress: () => navigation.goBack()},
+        { text: 'OK', onPress: () => navigation.goBack() },
       ]);
     }
   };
 
   return (
-    <View style={{flex: 1, padding: 20}}>
-      <Text style={{fontSize: 22, fontWeight: 'bold', marginBottom: 10}}>
-        Create Product
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Product</Text>
 
-      <TextInput
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Category"
-        value={category}
-        onChangeText={setCategory}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Subcategory"
-        value={subcategory}
-        onChangeText={setSubcategory}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Type"
-        value={type}
-        onChangeText={setType}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Price"
-        value={price}
-        onChangeText={setPrice}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Shop ID"
-        value={shopId}
-        onChangeText={setShopId}
-        keyboardType="numeric"
-        style={styles.input}
-      />
+      <ScrollView contentContainerStyle={styles.form}>
+        <TextInput
+          placeholder="Product Name"
+          placeholderTextColor="#888"
+          value={name}
+          onChangeText={setName}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Category"
+          placeholderTextColor="#888"
+          value={category}
+          onChangeText={setCategory}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Subcategory"
+          placeholderTextColor="#888"
+          value={subcategory}
+          onChangeText={setSubcategory}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Type"
+          placeholderTextColor="#888"
+          value={type}
+          onChangeText={setType}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Price"
+          placeholderTextColor="#888"
+          value={price}
+          onChangeText={setPrice}
+          keyboardType="numeric"
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Shop ID"
+          placeholderTextColor="#888"
+          value={shopId}
+          onChangeText={setShopId}
+          keyboardType="numeric"
+          style={styles.input}
+        />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleCreateProduct}
-        disabled={productStore.loading}>
-        {productStore.loading ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text style={styles.buttonText}>Create</Text>
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleCreateProduct}
+          disabled={productStore.loading}>
+          {productStore.loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text style={styles.buttonText}>Create</Text>
+          )}
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 });
 
-const styles = {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f4f6f9',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  form: {
+    paddingBottom: 20,
+  },
   input: {
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
+    padding: 12,
+    marginBottom: 12,
+    borderRadius: 8,
+    fontSize: 16,
+    color: '#333',
   },
   button: {
     backgroundColor: '#007bff',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 8,
     alignItems: 'center',
     marginTop: 10,
   },
-  buttonText: {color: 'white', fontSize: 16},
-};
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 export default CreateProductScreen;

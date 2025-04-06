@@ -1,7 +1,37 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {Alert} from 'react-native';
+import {placeOrder} from '../../api/orderApi';
 
-const PaymentScreen = ({navigation}) => {
+const PaymentScreen = ({route, navigation}) => {
+  const {cart} = route.params;
+
+  const handlePlaceOrder = async () => {
+    const cartItems = cart.map(item => ({
+      productId: item.id,
+      quantity: item.quantity,
+    }));
+
+    try {
+      const data = await placeOrder(cartItems);
+      console.log('Order placed:', data);
+
+      Alert.alert(
+        'Success',
+        data.message,
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('Receipt', {orderData: data}),
+          },
+        ],
+        {cancelable: false},
+      );
+    } catch (error) {
+      console.error('Order error:', error);
+      Alert.alert('Error', 'Failed to place order. Please try again.');
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Choose Payment Method</Text>
@@ -20,9 +50,7 @@ const PaymentScreen = ({navigation}) => {
         style={styles.qrCode}
       />
 
-      <TouchableOpacity
-        style={styles.confirmButton}
-        onPress={() => navigation.navigate('ShopScreen')}>
+      <TouchableOpacity style={styles.confirmButton} onPress={handlePlaceOrder}>
         <Text style={styles.confirmText}>Confirm Order</Text>
       </TouchableOpacity>
     </View>

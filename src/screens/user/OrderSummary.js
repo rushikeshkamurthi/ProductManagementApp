@@ -3,6 +3,7 @@ import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 
 const OrderSummary = ({route, navigation}) => {
   const {cart} = route.params;
+  console.log('cart:', cart);
 
   const totalPrice = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -28,7 +29,7 @@ const OrderSummary = ({route, navigation}) => {
 
       <TouchableOpacity
         style={styles.payButton}
-        onPress={() => navigation.navigate('Payment')}>
+        onPress={() => navigation.navigate('Payment', {cart})}>
         <Text style={styles.payButtonText}>Proceed to Payment</Text>
       </TouchableOpacity>
     </View>

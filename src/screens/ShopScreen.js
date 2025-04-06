@@ -1,19 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-const ShopScreen = ({ navigation }) => {
+const ShopScreen = ({navigation}) => {
+  const handleViewOrders = () => {
+    const dummyShopId = 1; // Replace this with actual selected shop ID
+    navigation.navigate('ShopOrders', {shopId: dummyShopId});
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Your Shops</Text>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Shop')}
-      >
+        onPress={() => navigation.navigate('Shop')}>
         <Text style={styles.buttonText}>Create New Order</Text>
       </TouchableOpacity>
-
-      <Text style={styles.headerText}>All Past Orders</Text>
+      <TouchableOpacity style={styles.button} onPress={handleViewOrders}>
+        <Text style={styles.buttonText}>View Past Orders</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -40,7 +44,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowRadius: 5,
     elevation: 3,
   },

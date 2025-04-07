@@ -43,6 +43,7 @@ const UserManagement = observer(({navigation}) => {
   };
 
   const filteredUsers = userStore.users.filter(user => {
+    console.log('filteredUsers', user);
     const matchSearch =
       user.username.toLowerCase().includes(searchText.toLowerCase()) ||
       user.email.toLowerCase().includes(searchText.toLowerCase());
@@ -86,139 +87,91 @@ const UserManagement = observer(({navigation}) => {
           </Picker>
         </View>
       </View>
+
       <FlatList
         data={filteredUsers}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
-          <View>
-            <View style={styles.userCardContent}>
-              <Image
-                source={{
-                  uri: 'https://bootdey.com/img/Content/avatar/avatar1.png',
-                }}
-                style={styles.avatar}
-              />
+          <View style={styles.userCardContent}>
+            <Image
+              source={{
+                uri: 'https://bootdey.com/img/Content/avatar/avatar1.png',
+              }}
+              style={styles.avatar}
+            />
 
-              <View style={styles.info}>
+            <View style={styles.info}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('UserInfoScreen', {user: toJS(item)})
+                }>
+                <Text style={styles.userName}>{item.username}</Text>
+                <Text style={styles.userEmail}>{item.email}</Text>
+                <Text
+                  style={[
+                    styles.userRole,
+                    {color: roleColors[item.roles[0]?.name]},
+                  ]}>
+                  {item.roles
+                    .map(r => r.name.replace(/_/g, ' ').toUpperCase())
+                    .join(', ')}
+                </Text>
+              </TouchableOpacity>
+              <View style={styles.actionButtonsRow}>
                 <TouchableOpacity
+                  style={[styles.actionButton, styles.editButton]}
                   onPress={() =>
-                    navigation.navigate('UserInfoScreen', {user: toJS(item)})
+                    navigation.navigate('AddEditUser', {user: toJS(item)})
                   }>
-                  <Text style={styles.userName}>{item.username}</Text>
-                  <Text style={styles.userEmail}>{item.email}</Text>
-                  <Text
-                    style={[
-                      styles.userRole,
-                      {color: roleColors[item.roles[0]?.name]},
-                    ]}>
-                    {item.roles
-                      .map(r => r.name.replace(/_/g, ' ').toUpperCase())
-                      .join(', ')}
-                  </Text>
+                  <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
-                <View style={styles.actionButtonsRow}>
-                  <TouchableOpacity
-                    style={[styles.actionButton, styles.editButton]}
-                    onPress={() =>
-                      navigation.navigate('AddEditUser', {user: toJS(item)})
-                    }>
-                    <Text style={styles.buttonText}>Edit</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.actionButton, styles.deleteButton]}
-                    onPress={() => handleDelete(item.id)}>
-                    <Text style={styles.buttonText}>Delete</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={[styles.actionButton, styles.deleteButton]}
+                  onPress={() => handleDelete(item.id)}>
+                  <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
         )}
       />
+      {/* Floating Action Button */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate('AddEditUser')}>
+        <Text style={styles.fabIcon}>+</Text>
+      </TouchableOpacity>
     </View>
   );
 });
 
 const styles = StyleSheet.create({
-  userCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    shadowOffset: {width: 0, height: 4},
-    elevation: 4,
-  },
-
-  userCardContent: {
-    flexDirection: 'row',
-  },
-
-  avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    marginRight: 15,
-  },
-
-  info: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-
-  userName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1E1E1E',
-  },
-
-  userEmail: {
-    fontSize: 14,
-    color: '#777',
-    marginTop: 2,
-  },
-
-  userRole: {
-    fontSize: 14,
-    marginTop: 4,
-    fontWeight: '600',
-  },
-
-  actionButtonsRow: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-
-  actionButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    marginRight: 10,
+  fab: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-
-  editButton: {
+    right: 20,
+    bottom: 30,
     backgroundColor: '#FF6F00',
+    borderRadius: 30,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
-
-  deleteButton: {
-    backgroundColor: '#E53935',
-  },
-
-  buttonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 14,
+  fabIcon: {
+    fontSize: 28,
+    color: 'white',
+    fontWeight: 'bold',
   },
 
   container: {
     flex: 1,
-    backgroundColor: '#FFF8F2',
-    paddingHorizontal: 10,
-    paddingTop: 20,
+    padding: 10,
+    position: 'relative',
   },
   loadingContainer: {
     flex: 1,
@@ -227,91 +180,90 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
+    textAlign: 'center',
+  },
+  createUserButton: {
+    backgroundColor: '#FF6F00',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 12,
+    marginHorizontal: 10,
+  },
+  createUserButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 10,
   },
   searchContainer: {
-    flexDirection: 'row',
-    marginBottom: 15,
-    alignItems: 'center',
+    flexDirection: 'column',
+    paddingHorizontal: 10,
+    marginBottom: 10,
   },
   searchInput: {
-    flex: 1,
-    height: 45,
-    borderColor: '#FF6F00',
     borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
+    borderColor: '#ddd',
+    padding: 8,
+    marginBottom: 8,
+    borderRadius: 5,
     backgroundColor: '#fff',
   },
   pickerContainer: {
-    marginLeft: 10,
-    borderColor: '#FF6F00',
+    backgroundColor: '#fff',
+    borderRadius: 5,
     borderWidth: 1,
-    borderRadius: 10,
-    overflow: 'hidden',
-    flex: 1,
+    borderColor: '#ddd',
   },
   picker: {
-    height: 45,
-    color: '#333',
+    width: '100%',
   },
-  userCard: {
+  userCardContent: {
     flexDirection: 'row',
+    padding: 10,
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    shadowOffset: {width: 0, height: 4},
-    elevation: 2,
+    marginVertical: 5,
+    borderRadius: 8,
+    elevation: 1,
   },
   avatar: {
-    width: 65,
-    height: 65,
-    borderRadius: 32,
+    width: 50,
+    height: 50,
+    marginRight: 10,
+    borderRadius: 25,
   },
   info: {
-    marginLeft: 15,
     flex: 1,
   },
   userName: {
-    fontSize: 18,
     fontWeight: 'bold',
-    color: '#1E1E1E',
+    fontSize: 16,
   },
   userEmail: {
-    fontSize: 14,
-    color: '#777',
-    marginTop: 2,
+    color: 'gray',
   },
   userRole: {
     fontSize: 14,
-    marginTop: 4,
-    fontWeight: '600',
+    marginTop: 2,
   },
-  buttonContainer: {
+  actionButtonsRow: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 8,
   },
   actionButton: {
-    flex: 1,
-    paddingVertical: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 6,
-    alignItems: 'center',
-    marginRight: 8,
+    marginRight: 10,
   },
   editButton: {
-    backgroundColor: '#FF6F00',
+    backgroundColor: '#4CAF50',
   },
   deleteButton: {
-    backgroundColor: '#E53935',
+    backgroundColor: '#F44336',
   },
   buttonText: {
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });
 

@@ -1,20 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import Header from '../../components/Header';
 import UserManagement from '../UserManagement';
+import {useNavigation} from '@react-navigation/native';
 
 const AdminUserManagement = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Header title="User Dashboard" />
-      
-      <View style={styles.content}>
-        <Text style={styles.heading}>Manage Users</Text>
-        
-        <View style={styles.card}>
-          <UserManagement />
-        </View>
-      </View>
+      <UserManagement navigation={navigation} />
     </View>
   );
 };
@@ -35,7 +29,6 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 15,
   },
-
 });
 
 export default AdminUserManagement;

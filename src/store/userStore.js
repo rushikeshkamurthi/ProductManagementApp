@@ -25,7 +25,7 @@ class UserStore {
   async addUser(userData) {
     try {
       const response = await createUser(userData);
-      this.users.push(response.data);
+      this.fetchUsers();
     } catch (error) {
       this.error = error.message;
     }

@@ -40,6 +40,11 @@ import SavedAddressesScreen from '../screens/SavedAddressesScreen';
 import MyPaymentMethodsScreen from '../screens/MyPaymentMethodsScreen';
 import HelpSupportScreen from '../screens/HelpSupportScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import UserInfoScreen from '../screens/UserInfoScreen';
+import ShopOrdersScreen from '../screens/ShopOrdersScreen';
+import PastOrderDetailsScreen from '../screens/PastOrderDetailsScreen';
+import ReceiptScreen from '../screens/ReceiptScreen';
+import ShopDetailsScreen from '../screens/ShopDetailsScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -70,7 +75,6 @@ const AdminTabs = () => (
     <Tab.Screen name="Dashboard" component={DashboardScreen} />
     <Tab.Screen name="Users" component={AdminUserManagement} />
     <Tab.Screen name="Accounts" component={AccountManagement} />
-    <Tab.Screen name="Shops" component={ShopManagement} />
     <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
@@ -161,6 +165,20 @@ const MainNavigator = ({user}) => {
       <Stack.Screen name="PaymentMethods" component={MyPaymentMethodsScreen} />
       <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="ShopOrders" component={ShopOrdersScreen} />
+      <Stack.Screen name="Receipt" component={ReceiptScreen} />
+      <Stack.Screen name="ShopDetailsScreen" component={ShopDetailsScreen} />
+
+      <Stack.Screen
+        name="PastOrderDetails"
+        component={PastOrderDetailsScreen}
+      />
+
+      <Stack.Screen
+        name="UserInfoScreen"
+        component={UserInfoScreen}
+        options={{title: 'User Info'}}
+      />
     </Stack.Navigator>
   );
 };

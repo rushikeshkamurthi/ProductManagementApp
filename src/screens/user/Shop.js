@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -10,57 +10,45 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
+import {observer} from 'mobx-react-lite';
+import productStore from '../../store/productStore';
+import {toJS} from 'mobx';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {width} = Dimensions.get('window');
 
-const categories = [
-  {id: 1, name: 'Fruits', image: 'https://via.placeholder.com/100'},
-  {id: 2, name: 'Vegetables', image: 'https://via.placeholder.com/100'},
-  {id: 3, name: 'Dairy', image: 'https://via.placeholder.com/100'},
-  {id: 4, name: 'Beverages', image: 'https://via.placeholder.com/100'},
-  {id: 5, name: 'Grains', image: 'https://via.placeholder.com/100'},
-  {id: 6, name: 'Misc', image: 'https://via.placeholder.com/100'},
-];
-
-const dummyProducts = [
-  {
-    id: 1,
-    name: 'Apples',
-    price: 50,
-    image: 'https://via.placeholder.com/100',
-    category: 'Fruits',
-  },
-  {
-    id: 2,
-    name: 'Bananas',
-    price: 30,
-    image: 'https://via.placeholder.com/100',
-    category: 'Fruits',
-  },
-  {
-    id: 3,
-    name: 'Tomatoes',
-    price: 40,
-    image: 'https://via.placeholder.com/100',
-    category: 'Vegetables',
-  },
-  {
-    id: 4,
-    name: 'Potatoes',
-    price: 25,
-    image: 'https://via.placeholder.com/100',
-    category: 'Vegetables',
-  },
-];
-
-const ShopScreen = ({navigation}) => {
+const ShopScreen = observer(({navigation}) => {
   const [cart, setCart] = useState({});
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [filteredProducts, setFilteredProducts] = useState(dummyProducts);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [isFilterModalVisible, setFilterModalVisible] = useState(false);
-  // Add item to cart or increase quantity
+  const [isTileView, setIsTileView] = useState(true);
+
+  useEffect(() => {
+    productStore.fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    if (productStore.products?.products) {
+      setFilteredProducts(productStore.products.products);
+    }
+  }, [productStore.products]);
+
+  const getUniqueCategories = () => {
+    const allProducts = productStore.products?.products || [];
+    const uniqueCategories = [
+      ...new Set(allProducts.map(product => product.category)),
+    ];
+    return uniqueCategories.map((cat, index) => ({
+      id: index,
+      name: cat,
+      image: 'https://via.placeholder.com/100',
+    }));
+  };
+
   const increaseQuantity = item => {
     setCart(prevCart => ({
       ...prevCart,
@@ -70,12 +58,11 @@ const ShopScreen = ({navigation}) => {
     }));
   };
 
-  // Decrease item quantity
   const decreaseQuantity = item => {
     setCart(prevCart => {
       if (prevCart[item.id]?.quantity === 1) {
         const updatedCart = {...prevCart};
-        delete updatedCart[item.id]; // Remove item if quantity is 0
+        delete updatedCart[item.id];
         return updatedCart;
       }
       return {
@@ -84,46 +71,97 @@ const ShopScreen = ({navigation}) => {
       };
     });
   };
-  // Add to Cart
-  const addToCart = item => {
-    setCart([...cart, item]);
-  };
 
-  // Search Handler
   const handleSearch = text => {
     setSearch(text);
+    const products = productStore.products?.products || [];
     if (text === '') {
-      setFilteredProducts(dummyProducts);
+      setFilteredProducts(products);
     } else {
       setFilteredProducts(
-        dummyProducts.filter(item =>
+        products.filter(item =>
           item.name.toLowerCase().includes(text.toLowerCase()),
         ),
       );
     }
   };
 
-  // Category Filter
   const filterByCategory = category => {
     setSelectedCategory(category);
-    setFilteredProducts(
-      dummyProducts.filter(item => item.category === category),
+    const products = productStore.products?.products || [];
+    setFilteredProducts(products.filter(item => item.category === category));
+  };
+
+  const renderProduct = ({item}) => {
+    const isTile = isTileView;
+
+    return (
+      <View style={[styles.productCard, isTile && styles.productTileCard]}>
+        <Image
+          source={{uri: item.image || 'https://via.placeholder.com/100'}}
+          style={isTile ? styles.tileImage : styles.listImage}
+        />
+        <View style={[styles.details, isTile && styles.tileDetails]}>
+          <Text style={styles.productName}>{item.name}</Text>
+          <Text style={styles.price}>₹{item.price}</Text>
+          {cart[item.id] ? (
+            <View style={styles.quantityContainer}>
+              <TouchableOpacity
+                onPress={() => decreaseQuantity(item)}
+                style={styles.quantityButton}>
+                <Text style={styles.quantityText}>-</Text>
+              </TouchableOpacity>
+              <Text style={styles.quantity}>{cart[item.id].quantity}</Text>
+              <TouchableOpacity
+                onPress={() => increaseQuantity(item)}
+                style={styles.quantityButton}>
+                <Text style={styles.quantityText}>+</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => increaseQuantity(item)}>
+              <Text style={styles.addButtonText}>Add</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
     );
   };
 
+  if (productStore.loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading Products...</Text>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {/* Search Bar */}
-      <TextInput
-        style={styles.searchBar}
-          placeholderTextColor="#000"
-        placeholder="Search for products..."
-        value={search}
-        onChangeText={handleSearch}
-      />
-
+      {/* Search */}
+      <View style={styles.searchBarStyle}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search products..."
+          placeholderTextColor="#aaa"
+          value={search}
+          onChangeText={handleSearch}
+        />
+        <View>
+          <TouchableOpacity onPress={() => setIsTileView(!isTileView)}>
+            <Ionicons
+              name={isTileView ? 'list' : 'grid'}
+              size={24}
+              color="#007BFF"
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
       {/* Filter Chips */}
-      <ScrollView
+      {/* <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.filterContainer}>
@@ -137,76 +175,56 @@ const ShopScreen = ({navigation}) => {
           style={styles.chip}>
           <Text style={styles.chipText}>More Filters</Text>
         </TouchableOpacity>
-      </ScrollView>
-
+      </ScrollView> */}
       {/* Categories */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.categoryContainer}>
-        {categories.map(category => (
-          <TouchableOpacity
-            key={category.id}
-            onPress={() => filterByCategory(category.name)}
-            style={styles.categoryCard}>
-            <Image
-              source={{uri: category.image}}
-              style={styles.categoryImage}
-            />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoryContainer}>
+          {getUniqueCategories().map(category => (
+            <TouchableOpacity
+              key={category.id}
+              onPress={() => filterByCategory(category.name)}
+              style={styles.categoryCard}>
+              <Image
+                source={{uri: category.image}}
+                style={styles.categoryImage}
+              />
+              <View style={{padding: 10}}>
+                <Text>{category.name}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
-      {/* Product List */}
+      {/* Products */}
       <FlatList
         data={filteredProducts}
+        key={isTileView ? 'tile' : 'list'}
         keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => (
-          <View style={styles.productCard}>
-            <Image source={{uri: item.image}} style={styles.image} />
-            <View style={styles.details}>
-              <Text style={styles.productName}>{item.name}</Text>
-              <Text style={styles.price}>₹{item.price}</Text>
-
-              {cart[item.id] ? (
-                <View style={styles.quantityContainer}>
-                  <TouchableOpacity
-                    onPress={() => decreaseQuantity(item)}
-                    style={styles.quantityButton}>
-                    <Text style={styles.quantityText}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.quantity}>{cart[item.id].quantity}</Text>
-                  <TouchableOpacity
-                    onPress={() => increaseQuantity(item)}
-                    style={styles.quantityButton}>
-                    <Text style={styles.quantityText}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={() => increaseQuantity(item)}>
-                  <Text style={styles.addButtonText}>Add</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        )}
+        numColumns={isTileView ? 2 : 1}
+        renderItem={renderProduct}
+        contentContainerStyle={{paddingBottom: 100}}
       />
 
       {/* Cart Button */}
-      {/* Cart Button */}
-      <TouchableOpacity
-        style={styles.cartButton}
-        onPress={() =>
-          navigation.navigate('OrderSummary', {cart: Object.values(cart)})
-        }>
-        <Text style={styles.cartButtonText}>
-          View Cart ({Object.values(cart).length})
-        </Text>
-      </TouchableOpacity>
+      {Object.keys(cart).length > 0 && (
+        <TouchableOpacity
+          style={styles.cartButton}
+          onPress={() =>
+            navigation.navigate('OrderSummary', {
+              cart: Object.values(JSON.parse(JSON.stringify(toJS(cart)))),
+            })
+          }>
+          <Text style={styles.cartButtonText}>
+            View Cart ({Object.values(cart).length})
+          </Text>
+        </TouchableOpacity>
+      )}
 
-      {/* Advanced Filter Modal */}
+      {/* Filter Modal */}
       <Modal visible={isFilterModalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Advanced Filters</Text>
@@ -219,87 +237,115 @@ const ShopScreen = ({navigation}) => {
       </Modal>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: 20, backgroundColor: '#fff'},
-  searchBar: {
-    height: 40,
-  borderWidth: 1,
-  borderColor: '#ccc',
-  borderRadius: 10,
-  paddingLeft: 15,
-  
-  marginBottom: 10,
-  color: '#000', 
-  },
-  filterContainer: {flexDirection: 'row', marginBottom: 10, maxHeight: 32},
-  chip: {
-    backgroundColor: '#EFEFEF',
-    paddingVertical: 6,
-    maxHeight: 30,
+  searchBarStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
     paddingHorizontal: 10,
-    marginRight: 12,
+  },
+
+  searchBar: {
+    flex: 1, // This makes the TextInput take all available space
+    height: 40,
+    color: '#000',
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  container: {flex: 1, padding: 15, backgroundColor: '#fff'},
+  filterContainer: {flexDirection: 'row', marginBottom: 10},
+  chip: {
+    backgroundColor: '#F0F0F0',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 20,
+    marginRight: 10,
   },
   chipText: {fontSize: 14},
-  categoryContainer: {
-    marginBottom: 10,
-  },
-  categoryCard: {
-    width: width / 4 - 20,
-    height: width / 4 - 20,
+  viewToggle: {
+    backgroundColor: '#eee',
+    padding: 6,
+    borderRadius: 20,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-    marginHorizontal: 4,
-    borderColor: '#ccc',
+  },
+  categoryContainer: {marginBottom: 10},
+  categoryCard: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     borderWidth: 1,
-    borderRadius: 10,
-    padding: 1,
+    borderColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
   },
-  categoryImage: {width: 80, height: 80, borderRadius: 40},
-  categoryText: {marginTop: 0, fontSize: 12, fontWeight: 'bold'},
+  categoryImage: {width: 60, height: 60, borderRadius: 30},
   productCard: {
+    flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#F6F6F6',
     padding: 10,
-    marginBottom: 10,
     borderRadius: 10,
+    marginBottom: 12,
+    marginRight: 10,
   },
-  image: {width: 60, height: 60, borderRadius: 10},
-  details: {flex: 1, marginLeft: 15},
-  productName: {fontSize: 18, fontWeight: 'bold'},
-  price: {fontSize: 16, color: '#EC5228', marginVertical: 5},
+  productTileCard: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: (width - 50) / 2,
+  },
+  listImage: {width: 60, height: 60, borderRadius: 10},
+  tileImage: {width: 100, height: 100, borderRadius: 10},
+  details: {flex: 1, marginLeft: 15, justifyContent: 'center'},
+  tileDetails: {marginLeft: 0, marginTop: 8, alignItems: 'center'},
+  productName: {fontSize: 16, fontWeight: 'bold'},
+  price: {fontSize: 14, color: '#EC5228', marginVertical: 5},
   addButton: {
     backgroundColor: '#007BFF',
-    padding: 8,
-    borderRadius: 5,
-    alignItems: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 6,
   },
-  addButtonText: {color: 'white', fontSize: 16},
+  addButtonText: {color: '#fff', fontWeight: 'bold'},
   quantityContainer: {flexDirection: 'row', alignItems: 'center'},
-  quantityButton: {backgroundColor: '#ddd', padding: 8, borderRadius: 5},
+  quantityButton: {
+    backgroundColor: '#ddd',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 5,
+  },
   quantityText: {fontSize: 16, fontWeight: 'bold'},
-  quantity: {fontSize: 18, marginHorizontal: 10},
+  quantity: {fontSize: 16, marginHorizontal: 10},
   cartButton: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
     backgroundColor: '#007BFF',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
-    marginTop: 10,
+    elevation: 4,
   },
-  cartButtonText: {color: 'white', fontSize: 18, fontWeight: 'bold'},
+  cartButtonText: {color: 'white', fontSize: 16, fontWeight: 'bold'},
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
     backgroundColor: '#fff',
     padding: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
     borderRadius: 10,
   },
   closeModal: {
@@ -308,7 +354,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  closeModalText: {fontSize: 16, fontWeight: 'bold', color: '#EC5228'},
+  closeModalText: {color: '#EC5228', fontWeight: 'bold'},
+  loadingContainer: {flex: 1, justifyContent: 'center', alignItems: 'center'},
 });
 
 export default ShopScreen;

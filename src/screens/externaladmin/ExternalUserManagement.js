@@ -8,7 +8,9 @@ const ExternalUserManagement = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <UserManagement navigation={navigation} />
+      <Header title="User Dashboard" />
+      <Text style={styles.text}></Text>
+      <UserManagement navigation={navigation}></UserManagement>
     </View>
   );
 };
@@ -16,21 +18,6 @@ const ExternalUserManagement = () => {
 const styles = StyleSheet.create({
   container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   text: {fontSize: 18},
-  container: {
-    flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-    alignItems: 'center',
-  },
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 15,
-  },
 });
 
 export default ExternalUserManagement;

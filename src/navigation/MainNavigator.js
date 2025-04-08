@@ -44,7 +44,6 @@ import UserInfoScreen from '../screens/UserInfoScreen';
 import ShopOrdersScreen from '../screens/ShopOrdersScreen';
 import PastOrderDetailsScreen from '../screens/PastOrderDetailsScreen';
 import ReceiptScreen from '../screens/ReceiptScreen';
-import ShopDetailsScreen from '../screens/ShopDetailsScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -75,6 +74,7 @@ const AdminTabs = () => (
     <Tab.Screen name="Dashboard" component={DashboardScreen} />
     <Tab.Screen name="Users" component={AdminUserManagement} />
     <Tab.Screen name="Accounts" component={AccountManagement} />
+    <Tab.Screen name="Shops" component={ShopManagement} />
     <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
@@ -167,8 +167,6 @@ const MainNavigator = ({user}) => {
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="ShopOrders" component={ShopOrdersScreen} />
       <Stack.Screen name="Receipt" component={ReceiptScreen} />
-      <Stack.Screen name="ShopDetailsScreen" component={ShopDetailsScreen} />
-
       <Stack.Screen
         name="PastOrderDetails"
         component={PastOrderDetailsScreen}
